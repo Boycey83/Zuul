@@ -1,0 +1,288 @@
+﻿@{
+    ViewBag.Title = "The Forum";
+}
+
+@section scripts
+{
+    @Scripts.Render("~/bundles/forum")
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var viewModel = new zuul.ForumViewModel();
+            ko.applyBindings(viewModel, $("#nu-forum")[0]);
+        });
+    </script>
+
+    <script id="replyTemplate" type="text/html">
+        <div class="row">
+            <div class="col-xs-1 no-wrap">
+            </div>
+            <div class="col-xs-6">
+                <div class="truncate-header">
+                    <span data-bind="css: padClass "></span>
+                    <div data-bind="css:{ 'selected-post-square' : isSelected, 'post-square' : !isSelected() }"></div>
+                    <span class="link-text" data-bind="text: title, click: $root.selectPost"></span>
+                </div>
+            </div>
+            <div class="col-xs-2">
+                <span class="thread-header-text truncate-header" data-bind="text: postedByUsername"></span>
+            </div>
+            <div class="col-xs-2 col-xs-offset-1">
+                <span class="thread-header-text truncate-header" data-bind="text: createdDayTimeString"></span>
+            </div>
+        </div>
+        <!-- ko template: { name: 'replyTemplate', foreach: replies } -->
+        <!-- /ko -->
+    </script>
+}
+
+<div id="nu-forum" class="row" style="display: none" data-bind="visible: isLoaded">
+    <div class="col-xs-12" data-bind="visible: getThreadsError() || getRepliesError() || logoutError()">
+        <p data-bind="visible: getThreadsError" class="alert forum-warning">
+            <span data-bind="text:getThreadsError"></span> There was a problem retrieving the thread list.
+            <span class="pull-right dismiss-error-button" data-bind="click: dismissThreadsError">
+                &#x2715;
+            </span>
+        </p>
+        <p data-bind="visible: getRepliesError" class="alert forum-warning">
+            <span data-bind="text:getRepliesError"></span> There was a problem retrieving the thread replies.
+            <span class="pull-right dismiss-error-button" data-bind="click: dismissRepliesError">
+                &#x2715;
+            </span>
+        </p>
+        <p data-bind="visible: logoutError" class="alert forum-warning">
+            <span data-bind="text:logoutError"></span> There was a problem logging out.
+            <span class="pull-right dismiss-error-button" data-bind="click: dismissLogoutError">
+                &#x2715;
+            </span>
+        </p>
+    </div>
+    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+        <div data-bind="if: !isShowingNewPostForm() && !isShowingNewAccountFrom()">
+            <div data-bind="if: selectedPost">
+                <div data-bind="with: selectedPost" class="post-container">
+                    <div class="post-title" data-bind="text: title">
+                    </div>
+                    <div class="post-body">
+                        <div class="post-body-notch-top"></div>
+                        <div class="post-author">
+                            Posted by
+                            <a class="link-text" data-bind="text: postedByUsername, attr: { href: mailtoUrl }"></a>, at
+                            <span data-bind="text: createdTimeString"></span> on
+                            <span data-bind="text: createdDateString"></span>
+                        </div>
+                        <div class="post-message" data-bind="text: message, linkify: { className: 'link-text'}">
+                        </div>
+                        <div class="post-reply-button">
+                            <span class="link-text" data-bind="click: $root.showReplyForm">Reply</span>
+                        </div>
+                    </div>
+                    <div class="post-body-notch-bottom"></div>
+                </div>
+            </div>
+            <div data-bind="if: !selectedPost() && !isShowingRegistrationSuccess()">
+                <div class="post-container">
+                    <div class="post-title">
+                        Welcome to the new forum
+                    </div>
+                    <div class="post-body">
+                        <div class="post-body-notch-top"></div>
+                        <div class="post-author">
+                            Posted by <span class="link-text">Walter Peck</span>, on 07.03.17
+                        </div>
+                        <div class="post-message">Warp was always the better record label anyway.</div>
+                    </div>
+                    <div class="post-body-notch-bottom"></div>
+                </div>
+            </div>
+            <div data-bind="if: isShowingRegistrationSuccess">
+                <div class="post-container">
+                    <div class="post-title">
+                        Your user account has been created
+                    </div>
+                    <div class="post-body">
+                        <div class="post-body-notch-top"></div>
+                        <div class="post-author">
+                            Posted by <span class="link-text">The Admin</span>, on 07.03.17
+                        </div>
+                        <div class="post-message">An email has been sent to your email address. Please follow the instructions in this email to enable your account.
+                        </div>
+                    </div>
+                    <div class="post-body-notch-bottom"></div>
+                </div>
+            </div>
+        </div>
+        <div data-bind="if: isShowingNewPostForm">
+            <div class="post-container">
+                <div class="post-input-form">
+                    <div class="new-post-header">Enter your message</div>
+                    <div class="alert forum-warning" data-bind="visible: postMessageError">
+                        <p data-bind="text: postMessageError"></p>
+                    </div>
+                    <div data-bind="if: isLoggedIn">
+                        <div class="new-post-logged-in-message">You are logged in as <strong data-bind="text: loggedInAsUsername"></strong></div>
+                    </div>
+                    <div data-bind="if: !isLoggedIn()">
+                        <div class="post-label">
+                            Username
+                        </div>
+                        <input type="text" class="post-input" data-bind="value: username" />
+                        <div class="post-label">
+                            Password
+                        </div>
+                        <input type="password" class="post-input" data-bind="value: password" />
+                    </div>
+                    <div class="post-label">
+                        Subject
+                    </div>
+                    <input type="text" class="post-input" data-bind="value: newMessageTitle" />
+                    <div class="post-label">
+                        Message
+                    </div>
+                    <textarea class="post-message-input" data-bind="value: newMessageText"></textarea>
+                    <div class="post-reply-button">
+                        <a href="#" class="link-text" data-bind="visible: !isPostingMessage(), click: postMessage">Post message</a>
+                        <span class="no-click-text" data-bind="visible: isPostingMessage">
+                            Posting message
+                            <a class="glyphicon glyphicon-refresh spinning"></a>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div data-bind="if: isShowingNewAccountFrom">
+            <div class="post-container">
+                <div class="post-title">
+                    Create Account
+                </div>
+                <div class="post-input-form">
+                    <div class="post-label">
+                        Username
+                    </div>
+                    <input type="text" class="post-input" data-bind="value: username" />
+                    <div class="post-label">
+                        Email
+                    </div>
+                    <input type="text" class="post-input" data-bind="value: emailAddress" />
+                    <div class="post-label">
+                        Password
+                    </div>
+                    <input type="password" class="post-input" data-bind="value: password" />
+                    <div class="post-label">
+                        Confirm Password
+                    </div>
+                    <input type="password" class="post-input" data-bind="value: passwordConfirm" />
+                    <div class="register-user-error" data-bind="visible: registerUserError">
+                        <span data-bind="text: registerUserError"></span>
+                        <div>Please try again.</div>
+                    </div>
+                    <div class="create-account-button">
+                        <a href="#" class="link-text" data-bind="visible: !isCreatingAccount(), click: registerAccount">Create Account</a>
+                        <span class="no-click-text" data-bind="visible: isCreatingAccount">
+                            Creating Account 
+                            <a class="glyphicon glyphicon-refresh spinning"></a>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xs-12 col-sm-6 col-md-8 col-lg-9 forum-right-side">
+        <div class="top-toolbar row">
+            <div class="col-xs-12">
+                <span class="link-text" data-bind="visible: !isLoadingThreads(), click: reloadThreads">Threads</span> |
+                <span class="no-click-text" data-bind="visible: isLoadingThreads, click: reloadThreads">
+                    Loading Threads
+                    <a class="glyphicon glyphicon-refresh spinning"></a>
+                </span>
+                <span class="link-text" data-bind="click: showNewThreadForm">Add Message</span> |
+                <span class="link-text" data-bind="visible: isLoggedIn, click: logout">Logout</span>
+                <span class="link-text" data-bind="visible: !isLoggedIn(), click: showNewAccountForm">Create account</span>
+                <input class="search-bar" type="text" placeholder="Don't expect this to work you cunts" />
+            </div>
+        </div>
+        <div>
+            <div class="all-threads-header thread-underline-gold row">
+                <div class="col-xs-1 no-wrap">
+                    <div class="focus-square-placeholder"></div>
+                    <a href="#" class="link-text"
+                       data-bind="visible: sortOrder() === zuul.constants.sortOrder.sizeDesc, click: function () { setSortOrder(zuul.constants.sortOrder.size) }">
+                        Size <span data-bind="visible: sortOrder() === zuul.constants.sortOrder.sizeDesc" class="glyphicon glyphicon-chevron-down"></span>
+                    </a>
+                    <a href="#" class="link-text"
+                       data-bind="visible: sortOrder() !== zuul.constants.sortOrder.sizeDesc, click: function () { setSortOrder(zuul.constants.sortOrder.sizeDesc) }">
+                        Size <span data-bind="visible: sortOrder() === zuul.constants.sortOrder.size" class="glyphicon glyphicon-chevron-up"></span>
+                    </a>
+                </div>
+                <div class="col-xs-6 no-wrap">
+                    <div class="post-square"></div>
+                    <a href="#" class="link-text"
+                       data-bind="visible: sortOrder() === zuul.constants.sortOrder.subjectDesc, click: function () { setSortOrder(zuul.constants.sortOrder.subject) }">
+                        Subject <span data-bind="visible: sortOrder() === zuul.constants.sortOrder.subjectDesc" class="glyphicon glyphicon-chevron-down"></span>
+                    </a>
+                    <a href="#" class="link-text"
+                       data-bind="visible: sortOrder() !== zuul.constants.sortOrder.subjectDesc, click: function () { setSortOrder(zuul.constants.sortOrder.subjectDesc) }">
+                        Subject <span data-bind="visible: sortOrder() === zuul.constants.sortOrder.subject" class="glyphicon glyphicon-chevron-up"></span>
+                    </a>
+                </div>
+                <div class="col-xs-2 no-wrap">
+                    <a href="#" class="link-text"
+                       data-bind="visible: sortOrder() === zuul.constants.sortOrder.postedByDesc, click: function () { setSortOrder(zuul.constants.sortOrder.postedBy) }">
+                        From <span data-bind="visible: sortOrder() === zuul.constants.sortOrder.postedByDesc" class="glyphicon glyphicon-chevron-down"></span>
+                    </a>
+                    <a href="#" class="link-text"
+                       data-bind="visible: sortOrder() !== zuul.constants.sortOrder.postedByDesc, click: function () { setSortOrder(zuul.constants.sortOrder.postedByDesc) }">
+                        From <span data-bind="visible: sortOrder() === zuul.constants.sortOrder.postedBy" class="glyphicon glyphicon-chevron-up"></span>
+                    </a>
+                </div>
+                <div class="col-xs-2 col-xs-offset-1 no-wrap">
+                    <a href="#" class="link-text"
+                       data-bind="visible: sortOrder() === zuul.constants.sortOrder.dateDesc, click: function () { setSortOrder(zuul.constants.sortOrder.date) }">
+                        When <span data-bind="visible: sortOrder() === zuul.constants.sortOrder.dateDesc" class="glyphicon glyphicon-chevron-down"></span>
+                    </a>
+                    <a href="#" class="link-text"
+                       data-bind="visible: sortOrder() !== zuul.constants.sortOrder.dateDesc, click: function () { setSortOrder(zuul.constants.sortOrder.dateDesc) }">
+                        When <span data-bind="visible: sortOrder() === zuul.constants.sortOrder.date" class="glyphicon glyphicon-chevron-up"></span>
+                    </a>
+                </div>
+            </div>
+            <!-- Threads -->
+            <div data-bind="foreach: threads">
+                <div class="thread-header row" data-bind="css: { 'thread-underline' : !isExpanded() }">
+                    <div class="col-xs-1 no-wrap">
+                        <div class="focus-square"></div>
+                        <span class="thread-header-text" data-bind="text: postCount"></span>
+                    </div>
+                    <div class="col-xs-6">
+                        <div class="truncate-header">
+                            <div data-bind="css:{ 'selected-post-square' : isSelected, 'post-square' : !isSelected() }"></div>
+                            <a href="#" class="link-text" data-bind="text: title, click: function () { $parent.expandThread($data) }"></a>
+                            <a class="glyphicon glyphicon-refresh spinning" data-bind="visible: $parent.loadingRepliesForThread() === $data"></a>
+                        </div>
+                    </div>
+                    <div class="col-xs-2">
+                        <span class="thread-header-text truncate-header" data-bind="text: postedByUsername"></span>
+                    </div>
+                    <div class="col-xs-2 col-xs-offset-1">
+                        <span class="thread-header-text truncate-header" data-bind="text: lastPostDateString"></span>
+                    </div>
+                </div>
+                <!-- ko if: isExpanded -->
+                <!-- ko template: { name: 'replyTemplate', foreach: replies } -->
+                <!-- /ko -->
+                <div data-bind="visisble: hasReplies " class="thread-underline row"></div>
+                <!-- /ko -->
+            </div>
+            <div class="thread-footer row">
+                <div class="col-xs-12">
+                    <span class="thread-header-text" data-bind="text: threadPageText"></span>
+                    <a href="#" class="link-text" data-bind="visible: pageNumber() > 1, click: goBackAPage"><<</a>
+                    <!-- ko foreach: pageNumbers -->
+                    <span class="thread-header-text" data-bind="visible: $data === $parent.pageNumber(), text: $data"></span>
+                    <a href="#" class="link-text" data-bind="visible: $data !== $parent.pageNumber(), text: $data, click: $parent.loadPage"></a>
+                    <!-- /ko -->
+                    <a href="#" class="link-text" data-bind="visible: pageNumber() < totalPages(), click: goForwardAPage">>></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

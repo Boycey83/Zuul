@@ -1,0 +1,58 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.24720.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zuul.Web", "Zuul.Web\Zuul.Web.csproj", "{90757AD5-9B7B-43AD-A29E-260195E09845}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zuul.Data", "Zuul.Data\Zuul.Data.csproj", "{986875D3-7C8C-4B9D-80C3-D5FD0FBE22BD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zuul.Model", "Zuul.Model\Zuul.Model.csproj", "{18492477-C733-4C7F-BB77-6E39361B637D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zuul.Migrations", "Zuul.Migrations\Zuul.Migrations.csproj", "{C344BE6E-F54A-402C-9EAA-349D768CF142}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zuul.BusinessLogic", "Zuul.BusinessLogic\Zuul.BusinessLogic.csproj", "{7FB7FD19-55AE-451F-B438-F3BB84F1A730}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zuul.Resources", "Zuul.Resources\Zuul.Resources.csproj", "{F7C94200-1BA6-4623-A1B9-81FE4D158782}"
+EndProject
+Project("{CC5FD16D-436D-48AD-A40C-5A424C6E3E79}") = "Zuul.Web.Azure", "Zuul.Web.Azure\Zuul.Web.Azure.ccproj", "{49A60BB3-F292-4816-854A-82F3FB50B33A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{90757AD5-9B7B-43AD-A29E-260195E09845}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{90757AD5-9B7B-43AD-A29E-260195E09845}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{90757AD5-9B7B-43AD-A29E-260195E09845}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{90757AD5-9B7B-43AD-A29E-260195E09845}.Release|Any CPU.Build.0 = Release|Any CPU
+		{986875D3-7C8C-4B9D-80C3-D5FD0FBE22BD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{986875D3-7C8C-4B9D-80C3-D5FD0FBE22BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{986875D3-7C8C-4B9D-80C3-D5FD0FBE22BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{986875D3-7C8C-4B9D-80C3-D5FD0FBE22BD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{18492477-C733-4C7F-BB77-6E39361B637D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{18492477-C733-4C7F-BB77-6E39361B637D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{18492477-C733-4C7F-BB77-6E39361B637D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{18492477-C733-4C7F-BB77-6E39361B637D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C344BE6E-F54A-402C-9EAA-349D768CF142}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C344BE6E-F54A-402C-9EAA-349D768CF142}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C344BE6E-F54A-402C-9EAA-349D768CF142}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C344BE6E-F54A-402C-9EAA-349D768CF142}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7FB7FD19-55AE-451F-B438-F3BB84F1A730}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7FB7FD19-55AE-451F-B438-F3BB84F1A730}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7FB7FD19-55AE-451F-B438-F3BB84F1A730}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7FB7FD19-55AE-451F-B438-F3BB84F1A730}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F7C94200-1BA6-4623-A1B9-81FE4D158782}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F7C94200-1BA6-4623-A1B9-81FE4D158782}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F7C94200-1BA6-4623-A1B9-81FE4D158782}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F7C94200-1BA6-4623-A1B9-81FE4D158782}.Release|Any CPU.Build.0 = Release|Any CPU
+		{49A60BB3-F292-4816-854A-82F3FB50B33A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{49A60BB3-F292-4816-854A-82F3FB50B33A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{49A60BB3-F292-4816-854A-82F3FB50B33A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{49A60BB3-F292-4816-854A-82F3FB50B33A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
