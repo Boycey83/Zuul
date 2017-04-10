@@ -11,16 +11,7 @@
             ko.applyBindings(viewModel, $("#nu-forum")[0]);
         });
     </script>
-
-    <script id="horizontalLineTemplate" type="text/html">
-        <div class="post-square-2">
-            <div class="post-square-2-inner">
-                <div class="block-line-left"></div>
-                <div class="block-line-right"></div>
-            </div>
-        </div>
-    </script>
-
+    
     <script id="replyTemplate" type="text/html">
         <div class="row">
             <div class="col-xs-1 no-wrap">
@@ -39,12 +30,7 @@
                         </div>
                     </div>
                     <!-- /ko -->
-                    @*<div data-bind="css:{ 'selected-post-square' : isSelected, 'post-square' : !isSelected() }"></div>*@
-                    <div class="post-square-2">
-                        <div class="post-square-2-inner">
-                            <div class="block-line-right"></div>
-                        </div>
-                    </div>
+                    <div class="post-square-2"></div>
                     <span class="link-text" data-bind="text: title, click: $root.selectPost"></span>
                 </div>
             </div>
