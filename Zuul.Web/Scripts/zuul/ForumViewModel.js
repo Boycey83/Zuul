@@ -212,6 +212,10 @@
                     if (isLoginSuccess) {
                         self.isLoggedIn(isLoginSuccess);
                         self.completePostMessage();
+                    } else {
+                        var errorMessage = { responseText: "The username / password are incorrect" };
+                        self.populateErrorMessage(self.postMessageError, errorMessage);
+                        self.isPostingMessage(false);
                     }
                 })
                 .fail(function (jqXHR) {
