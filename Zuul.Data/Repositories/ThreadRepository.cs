@@ -39,8 +39,7 @@ namespace Zuul.Data.Repositories
             var threadsToSkip = (pageNumber - 1) * pageSize;
             var query = _session.Query<Thread>();
             query = ApplyThreadSortOrder(sortOrder, query);
-            return query.Skip(threadsToSkip).Take(pageSize);
-
+            return query.Skip(threadsToSkip).Take(pageSize).Fetch(t => t.PostedBy);
         }
 
         public int GetThreadCount()

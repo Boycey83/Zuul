@@ -3,6 +3,7 @@ using System.Linq;
 using System.Collections.Generic;
 using Zuul.Model;
 using NHibernate.Transform;
+using NHibernate.Criterion;
 
 namespace Zuul.Data.Repositories
 {
@@ -30,11 +31,14 @@ namespace Zuul.Data.Repositories
             return 
                 _session
                     .CreateCriteria<Post>()
+                    .Add(Restrictions.Eq("Thread.Id", threadId))
+                    .AddOrder(Order.Asc("CreatedDateTimeUtc"))
                     .SetFetchMode("Replies", FetchMode.Join)
+                    .SetFetchMode("PostedBy", FetchMode.Join)
                     .SetResultTransformer(new DistinctRootEntityResultTransformer())
-                    .SetMaxResults(3000)
+                    .SetMaxResults(250)
                     .List<Post>()
-                    .Where(p => p.Parent == null && p.Thread.Id == threadId);
+                    .Where(p => p.Parent == null);
         }
     }
 }
