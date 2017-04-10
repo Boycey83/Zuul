@@ -93,8 +93,9 @@
         self.loadingRepliesForThread(thread);
         self.service().getThreadReplies(thread.id())
             .done(function (threadRepliesData) {
-                thread.replies(ko.utils.arrayMap(threadRepliesData, function (threadReplyData) {
-                    return new zuul.Reply(threadReplyData);
+                thread.replies(ko.utils.arrayMap(threadRepliesData, function (threadReplyData, index) {
+                    var isLastReply = threadRepliesData.length === index + 1;
+                    return new zuul.Reply(threadReplyData, [], isLastReply);
                 }));
                 self.isShowingNewPostForm(false);
                 if (self.expandedThread()) {

@@ -1,4 +1,5 @@
-﻿body {
+﻿
+body {
     padding-top: 50px;
     padding-bottom: 20px;
     background-color: #262729;
@@ -147,7 +148,6 @@
 
 .thread-header {
     padding-top: 1px;
-    padding-bottom: 1px;
 }
 
 .thread-underline {
@@ -261,6 +261,58 @@
     width: 6px;
     display: inline-block;
     border-bottom-width: 2px;
+}
+
+.post-square-2 {
+    display: inline-block;
+    width: 8px;
+    height: 10px;
+}
+
+.post-square-2-inner {
+    width: 12px;
+    height: 21px;
+    margin-top: -6px;
+}
+
+.tree-line-vertical {
+    position: absolute;
+    height: 100%;
+    display: inline-block;
+    margin-left: 3px;
+    border-left-style: solid;
+    border-left-color: #5c5951;
+    border-left-width: 1px;
+}
+
+.tree-line-vertical-half {
+    position: absolute;
+    height: 12px;
+    display: inline-block;
+    margin-left: 3px;
+    border-left-style: solid;
+    border-left-color: #5c5951;
+    border-left-width: 1px;
+}
+
+.tree-line-horizontal {
+    position: absolute;
+    border-bottom-style: solid;
+    border-bottom-color: #5c5951;
+    border-bottom-width: 1px;
+    width: 12px;
+    margin-top: 11px;
+    margin-left: 3px;
+}
+
+.tree-selected {
+    position: absolute;
+    display: inline-block;
+    margin-left: 12px;
+    height: 7px;
+    width: 7px;
+    background-color: #ad855c;
+    margin-top: 8px;
 }
 
 .post-input-form {

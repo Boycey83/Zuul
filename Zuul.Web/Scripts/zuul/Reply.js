@@ -1,4 +1,16 @@
-﻿zuul.Reply = function (data, depth) {
+﻿zuul.Reply = function (data, treeRow, isLastReplyInTreeColumn) {
+
+    var buildTreeRow = function (parentTreeRow, isLastReply) {
+        var treeRow;
+        if (parentTreeRow && parentTreeRow.length > 0) {
+            treeRow = parentTreeRow.slice();
+        } else {
+            treeRow = parentTreeRow || [];
+        }
+        treeRow.push(isLastReply);
+        return treeRow;
+    };
+
     var self = this;
 
     self.id = ko.observable(data ? data.Id : null);
@@ -8,10 +20,11 @@
     self.postedByUsername = ko.observable(data ? data.PostedByUsername : null);
     self.postedByEmailAddress = ko.observable(data ? data.PostedByEmailAddress : null);
     self.createdDateTimeUtc = ko.observable(data ? moment.utc(data.CreatedDateTimeUtc) : null);
-    self.depth = ko.observable(depth || 1);
+    self.treeRow = ko.observableArray(buildTreeRow(treeRow, isLastReplyInTreeColumn));
     self.replies = ko.observable(data ?
-        ko.utils.arrayMap(data.Replies, function (replyData) {
-            return new zuul.Reply(replyData, self.depth() + 1);
+        ko.utils.arrayMap(data.Replies, function (replyData, index) {
+            var isLastReply = data.Replies.length === index + 1;
+            return new zuul.Reply(replyData, self.treeRow(), isLastReply);
         }) : null);
     self.isSelected = ko.observable(false);
 
@@ -36,8 +49,4 @@
     self.mailtoUrl = ko.computed(function () {
         return zuul.constants.mailtoTemplate.format(self.postedByEmailAddress());
     });
-
-    self.padClass = ko.computed(function () {
-        return "pad-left-" + self.depth();
-    })
 }
