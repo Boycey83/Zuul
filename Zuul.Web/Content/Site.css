@@ -94,14 +94,36 @@ body {
 }
 
 .link-text {
+    text-decoration: none;
     color: #ad855c;
 }
 
-.link-text:visited {
+.link-text:hover {
+    text-decoration: underline;
+    cursor: pointer;
+    color: #ad855c;
+}
+
+a.link-text {
+    text-decoration: none;
+    color: #ad855c;
+}
+
+a.link-text:focus {
+    text-decoration: none;
     color: #757778;
 }
 
-.link-text:hover {
+a.link-text:focus:hover {
+    text-decoration: underline;
+    color: #ad855c;
+}
+
+a.link-text:visited {
+    color: #757778;
+}
+
+a.link-text:hover {
     text-decoration: underline;
     cursor: pointer;
     color: #ad855c;
