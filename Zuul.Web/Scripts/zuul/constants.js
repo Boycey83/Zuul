@@ -12,6 +12,11 @@
         createReplyToPost: "/api/Forum/Thread/{0}/Post/{1}/Reply",
         getThreadReplies: "/api/Forum/Thread/{0}/Replies"
     },
+    urls: {
+        base: "/",
+        thread: "/Thread/{0}?p={1}",
+        reply: "/Thread/{0}/Reply/{1}"
+    },
     pageSize: 25,
     mailtoTemplate: "mailto:{0}",
     sortOrder: {

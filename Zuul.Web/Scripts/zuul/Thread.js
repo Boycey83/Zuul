@@ -13,6 +13,10 @@
     self.isExpanded = ko.observable(false);
     self.isSelected = ko.observable(false);
 
+    self.url = ko.computed(function () {
+        return zuul.constants.urls.thread.format(self.id(), self.postCount());
+    });
+
     self.createdDateTime = ko.computed(function () {
         if (self.createdDateTimeUtc()) {
             return self.createdDateTimeUtc().local();

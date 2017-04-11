@@ -97,6 +97,10 @@ body {
     color: #ad855c;
 }
 
+.link-text:visited {
+    color: #757778;
+}
+
 .link-text:hover {
     text-decoration: underline;
     cursor: pointer;

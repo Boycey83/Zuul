@@ -82,4 +82,13 @@
             contentType: 'application/json'
         });
     };
+
+    self.resetUrl = function () {
+        window.history.pushState(null, null, zuul.constants.urls.base);
+    };
+
+    self.addUrlToVisited = function (url) {
+        history.replaceState(null, null, url);
+        history.replaceState(null, null, zuul.constants.urls.base)
+    };
 };

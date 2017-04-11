@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Web.Mvc;
 using Zuul.BusinessLogic.Services;
+using Zuul.Web.Models;
 
 namespace Zuul.Web.Controllers
 {
@@ -15,7 +16,19 @@ namespace Zuul.Web.Controllers
 
         public ActionResult Index()
         {
-            return View();
+            return View(new ForumViewModel());
+        }
+
+        [Route("Thread/{threadId:int}")]
+        public ActionResult Index(int threadId)
+        {
+            return View(new ForumViewModel { ThreadId = threadId });
+        }
+
+        [Route("Thread/{threadId:int}/Reply/{replyId:int}")]
+        public ActionResult Index(int threadId, int replyId)
+        {
+            return View(new ForumViewModel { ThreadId = threadId, ReplyId = replyId });
         }
 
         [Route("UserAccount/{userAccountId:int}/Confirm/{tokenString}")]

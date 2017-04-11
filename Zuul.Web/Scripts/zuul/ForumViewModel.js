@@ -1,4 +1,4 @@
-﻿zuul.ForumViewModel = function () {
+﻿zuul.ForumViewModel = function (initialThreadId, initialReplyId) {
     var self = this;
 
     self.service = ko.observable(new zuul.ForumService());
@@ -93,6 +93,7 @@
         self.loadingRepliesForThread(thread);
         self.service().getThreadReplies(thread.id())
             .done(function (threadRepliesData) {
+                self.service().addUrlToVisited(thread.url())
                 thread.replies(ko.utils.arrayMap(threadRepliesData, function (threadReplyData, index) {
                     var isLastReply = threadRepliesData.length === index + 1;
                     return new zuul.Reply(threadReplyData, [], isLastReply);
@@ -147,6 +148,7 @@
             self.selectedPost().isSelected(false);
         }
         post.isSelected(true);
+        self.service().addUrlToVisited(post.url());
         self.selectedPost(post);
     };
 
@@ -355,5 +357,6 @@
                 self.isLoadingThreads(false);
             });
     };
-    self.load();
+    self.load(initialThreadId, initialReplyId);
+    self.service().resetUrl();
 };

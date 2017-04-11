@@ -28,6 +28,10 @@
         }) : null);
     self.isSelected = ko.observable(false);
 
+    self.url = ko.computed(function () {
+        return zuul.constants.urls.reply.format(self.threadId(), self.id());
+    });
+
     self.createdDateTime = ko.computed(function () {
         if (self.createdDateTimeUtc()) {
             return self.createdDateTimeUtc().local();
