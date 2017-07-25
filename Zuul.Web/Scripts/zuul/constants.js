@@ -1,6 +1,8 @@
 ﻿zuul.constants = {
     api: {
         registerAccount: "/api/UserAccount/Register",
+        requestPasswordReset: "/api/UserAccount/RequestPasswordReset",
+        updatePassword: "/api/UserAccount/UpdatePassword",
         login: "/api/UserAccount/Login",
         logout: "/api/UserAccount/Logout",
         getThreads: "/api/Forum/Threads",

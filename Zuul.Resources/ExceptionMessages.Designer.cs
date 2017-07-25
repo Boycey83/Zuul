@@ -268,6 +268,60 @@ namespace Zuul.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Could not update password, a new password must be supplied..
+        /// </summary>
+        public static string UpdatePasswordPasswordMustBeSupplied {
+            get {
+                return ResourceManager.GetString("UpdatePasswordPasswordMustBeSupplied", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Could not update password, the supplied passwords must match..
+        /// </summary>
+        public static string UpdatePasswordPasswordsMustMatch {
+            get {
+                return ResourceManager.GetString("UpdatePasswordPasswordsMustMatch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Could not update password, the supplied password must be at least 8 characters in length..
+        /// </summary>
+        public static string UpdatePasswordPasswordTooShort {
+            get {
+                return ResourceManager.GetString("UpdatePasswordPasswordTooShort", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Could not update password, the authentication code has expired. Please request another code to reset your password..
+        /// </summary>
+        public static string UpdatePasswordTokenExpired {
+            get {
+                return ResourceManager.GetString("UpdatePasswordTokenExpired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Could not update password, the authentication code was incorrect..
+        /// </summary>
+        public static string UpdatePasswordTokenIncorrect {
+            get {
+                return ResourceManager.GetString("UpdatePasswordTokenIncorrect", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Could not update password, the supplied email address did not match an existing account..
+        /// </summary>
+        public static string UpdatePasswordUserAccountNotFound {
+            get {
+                return ResourceManager.GetString("UpdatePasswordUserAccountNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Could not validate User Account, the account is not yet active. Please click on the link sent to {0} to activate your account..
         /// </summary>
         public static string UserAccountNotActivated {

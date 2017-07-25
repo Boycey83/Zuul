@@ -33,6 +33,39 @@ namespace Zuul.BusinessLogic.Services
             return userAccountId;
         }
 
+        public bool RequestPasswordReset(string emailAddress)
+        {
+            emailAddress = emailAddress.Trim();
+            var userAccount = _userAccountRepository.GetByEmail(emailAddress);
+            if (userAccount == null)
+            {
+                return false;
+            }
+            userAccount.ResetToken = Guid.NewGuid();
+            userAccount.ResetTokenExpiry = DateTime.UtcNow.AddDays(1);
+            _userAccountRepository.UpdateUser(userAccount);
+            EmailHelper.SendUserPasswordResetEmail(userAccount);
+            return true;
+        }
+
+        public void UpdatePassword(string emailAddress, string authenticationCode, string password, string passwordConfirm)
+        {
+            emailAddress = emailAddress.Trim();
+            var userAccount = _userAccountRepository.GetByEmail(emailAddress);
+            ValidateUpdatePassword(authenticationCode, password, passwordConfirm, userAccount);
+            userAccount.PasswordSalt = _passwordService.GetPasswordSalt();
+            userAccount.PasswordHash = _passwordService.GetPasswordHash(password, userAccount.PasswordSalt);
+            userAccount.ResetTokenExpiry = null;
+            userAccount.ResetToken = null;
+            _userAccountRepository.UpdateUser(userAccount);
+        }
+
+        public bool IsPasswordResetTokenValid(int userAccountId, Guid token)
+        {
+            var userAccount = _userAccountRepository.GetById(userAccountId);
+            return userAccount.ResetToken == token && userAccount.ResetTokenExpiry > DateTime.UtcNow;
+        }
+
         public int ValidateUser(string username, string password)
         {
             var userAccount = GetByUserAccountByUsernameAndValidateUsername(username, ExceptionMessages.ValidateUsernameNotFound);
@@ -59,15 +92,6 @@ namespace Zuul.BusinessLogic.Services
         {
             return _userAccountRepository.GetByUsername(username);
         }
-
-        //public void ChangePassword(string userEmail, string oldPassword, string newPassword)
-        //{
-        //	var userAccount = GetByUserAccountByEmailAndValidateEmailAddress(userEmail, ExceptionMessages.ChangePasswordUserAccountEmailAddressNotFound);
-        //	ValidateChangePassword(oldPassword, newPassword, userAccount);
-        //	var newPasswordSalt = _passwordService.GetPasswordSalt();
-        //	var newPasswordHash = _passwordService.GetPasswordHash(newPassword, newPasswordSalt);
-        //	_userAccountRepository.ChangePassword(userAccount.Id, newPasswordSalt, newPasswordHash);
-        //}
 
         #region Validation Methods
 
@@ -98,19 +122,6 @@ namespace Zuul.BusinessLogic.Services
                 throw new ValidationException(string.Format(ExceptionMessages.UserAccountNotActivated, userAccount.EmailAddress));
             }
         }
-
-        //private void ValidateChangePassword(string oldPassword, string newPassword, UserAccount userAccount)
-        //{
-        //    ValidateUserAccountPassword(newPassword);
-        //    if (oldPassword == newPassword)
-        //    {
-        //        throw new ValidationException(ExceptionMessages.ChangePasswordNewPasswordMustNotMatchOld);
-        //    }
-        //    if (!_passwordService.ValidatePassword(userAccount.PasswordSalt, userAccount.PasswordHash, oldPassword))
-        //    {
-        //        throw new ValidationException(ExceptionMessages.ChangePasswordOldPasswordNotCorrect);
-        //    }
-        //}
 
         private void ValidateCreate(string userEmail, string username, string password, string passwordConfirm)
         {
@@ -182,6 +193,34 @@ namespace Zuul.BusinessLogic.Services
             if (_userAccountRepository.ExistsWithUsername(username))
             {
                 throw new ValidationException(string.Format(ExceptionMessages.CreateUserAccountUsernameDuplicate, username));
+            }
+        }
+
+        private static void ValidateUpdatePassword(string authenticationCode, string password, string passwordConfirm, UserAccount userAccount)
+        {
+            if (userAccount == null)
+            {
+                throw new ValidationException(ExceptionMessages.UpdatePasswordUserAccountNotFound);
+            }
+            if (userAccount.ResetTokenExpiry < DateTime.UtcNow)
+            {
+                throw new ValidationException(ExceptionMessages.UpdatePasswordTokenExpired);
+            }
+            if (userAccount.ResetToken.ToString() != authenticationCode.ToLower())
+            {
+                throw new ValidationException(ExceptionMessages.UpdatePasswordTokenIncorrect);
+            }
+            if (string.IsNullOrEmpty(password))
+            {
+                throw new ValidationException(ExceptionMessages.UpdatePasswordPasswordMustBeSupplied);
+            }
+            if (password != passwordConfirm)
+            {
+                throw new ValidationException(ExceptionMessages.UpdatePasswordPasswordsMustMatch);
+            }
+            if (password.Length < 8)
+            {
+                throw new ValidationException(ExceptionMessages.UpdatePasswordPasswordTooShort);
             }
         }
 

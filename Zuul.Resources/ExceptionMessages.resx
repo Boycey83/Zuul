@@ -186,6 +186,24 @@
   <data name="CreateUserAccountUsernameTooLong" xml:space="preserve">
     <value>Could not create User Account, the supplied username was too long. A username must be 30 characters or less.</value>
   </data>
+  <data name="UpdatePasswordPasswordMustBeSupplied" xml:space="preserve">
+    <value>Could not update password, a new password must be supplied.</value>
+  </data>
+  <data name="UpdatePasswordPasswordsMustMatch" xml:space="preserve">
+    <value>Could not update password, the supplied passwords must match.</value>
+  </data>
+  <data name="UpdatePasswordPasswordTooShort" xml:space="preserve">
+    <value>Could not update password, the supplied password must be at least 8 characters in length.</value>
+  </data>
+  <data name="UpdatePasswordTokenExpired" xml:space="preserve">
+    <value>Could not update password, the authentication code has expired. Please request another code to reset your password.</value>
+  </data>
+  <data name="UpdatePasswordTokenIncorrect" xml:space="preserve">
+    <value>Could not update password, the authentication code was incorrect.</value>
+  </data>
+  <data name="UpdatePasswordUserAccountNotFound" xml:space="preserve">
+    <value>Could not update password, the supplied email address did not match an existing account.</value>
+  </data>
   <data name="UserAccountNotActivated" xml:space="preserve">
     <value>Could not validate User Account, the account is not yet active. Please click on the link sent to {0} to activate your account.</value>
   </data>

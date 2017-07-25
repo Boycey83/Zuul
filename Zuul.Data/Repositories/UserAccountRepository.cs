@@ -64,5 +64,10 @@ namespace Zuul.Data.Repositories
             userAccount.IsActivated = true;
             _session.Update(userAccount);
         }
+
+        public void UpdateUser(UserAccount userAccount)
+        {
+            _session.Update(userAccount);
+        }
     }
 }

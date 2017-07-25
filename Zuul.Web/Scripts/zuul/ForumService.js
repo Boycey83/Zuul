@@ -10,6 +10,29 @@
         });
     };
 
+    self.requestPasswordReset = function (emailAddress) {
+        return $.ajax({
+            type: "POST",
+            url: zuul.constants.api.requestPasswordReset,
+            data: ko.toJSON({ EmailAddress: emailAddress }),
+            contentType: 'application/json'
+        });
+    };
+
+    self.updatePassword = function (emailAddress, authenticationCode, password, passwordConfirm) {
+        return $.ajax({
+            type: "POST",
+            url: zuul.constants.api.updatePassword,
+            data: ko.toJSON({
+                EmailAddress: emailAddress,
+                AuthenticationCode: authenticationCode,
+                Password: password,
+                PasswordConfirm: passwordConfirm
+            }),
+            contentType: 'application/json'
+        });
+    };
+
     self.login = function (username, password) {
         return $.ajax({
             type: "POST",

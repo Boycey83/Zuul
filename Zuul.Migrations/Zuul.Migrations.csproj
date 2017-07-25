@@ -58,6 +58,7 @@
     <Compile Include="M201703261504_AddTokenColumnToUserAccountTable.cs" />
     <Compile Include="M201703131826_AddThreadIdColumnToPostTable.cs" />
     <Compile Include="M201703131823_CreateThreadTable.cs" />
+    <Compile Include="M201704231951_AddPasswordResetTokenAndExpiryColumnsToUserAccountTable.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

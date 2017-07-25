@@ -15,9 +15,14 @@
     self.passwordConfirm = ko.observable();
     self.newMessageTitle = ko.observable();
     self.newMessageText = ko.observable();
+    self.updatePasswordEmailAddress = ko.observable();
+    self.passwordResetCode = ko.observable();
     self.isShowingNewPostForm = ko.observable(false);
-    self.isShowingNewAccountFrom = ko.observable(false);
+    self.isShowingNewAccountForm = ko.observable(false);
     self.isShowingRegistrationSuccess = ko.observable(false);
+    self.isShowingPasswordResetForm = ko.observable(false);
+    self.isShowingUpdatePasswordForm = ko.observable(false);
+    self.isPasswordUpdateComplete = ko.observable(false);
     self.loggedInAsUsername = ko.observable();
     self.isLoggedIn = ko.observable(false);
     self.isLoaded = ko.observable(false);
@@ -26,7 +31,9 @@
     self.isLoadingThreads = ko.observable(false);
     self.isPostingMessage = ko.observable(false);
     self.isCreatingAccount = ko.observable(false);
-    self.loadingRepliesForThread = ko.observable();
+    self.loadingRepliesForThread = ko.observable(false);
+    self.isSendingResetPasswordEmail = ko.observable(false);
+    self.isResettingPassword = ko.observable(false);
 
     self.postToReplyTo = ko.observable();
 
@@ -34,7 +41,10 @@
     self.getThreadsError = ko.observable();
     self.getRepliesError = ko.observable();
     self.logoutError = ko.observable();
-    self.postMessageError = ko.observable("whatever man");
+    self.postMessageError = ko.observable();
+    self.passwordUpdateError = ko.observable();
+    self.isResetPasswordError = ko.observable(false);
+    
 
     self.threadPageText = ko.computed(function () {
         var firstThreadNumberOnPage = ((self.pageNumber() - 1) * self.pageSize()) + 1;
@@ -136,13 +146,34 @@
         self.password(null);
         self.passwordConfirm(null);
         self.isShowingNewPostForm(false);
-        self.isShowingNewAccountFrom(true);
+        self.isShowingNewAccountForm(true);
+        self.isShowingPasswordResetForm(false);
+        self.isShowingUpdatePasswordForm(false);
         self.isShowingRegistrationSuccess(false);
+    };
+
+    self.showPasswordResetForm = function () {
+        self.username(null);
+        self.isShowingNewPostForm(false);
+        self.isShowingNewAccountForm(false);
+        self.isShowingUpdatePasswordForm(false);
+        self.isShowingPasswordResetForm(true);
+    };
+
+    self.showUpdatePasswordForm = function () {
+        self.password(null)
+        self.passwordConfirm = ko.observable(null);
+        self.isShowingNewPostForm(false);
+        self.isShowingNewAccountForm(false);
+        self.isShowingPasswordResetForm(false);
+        self.isShowingUpdatePasswordForm(true);
     };
 
     self.selectPost = function (post) {
         self.isShowingNewPostForm(false);
-        self.isShowingNewAccountFrom(false);
+        self.isShowingNewAccountForm(false);
+        self.isShowingPasswordResetForm(false);
+        self.isShowingUpdatePasswordForm(false);
         self.isShowingRegistrationSuccess(false);
         if (self.selectedPost()) {
             self.selectedPost().isSelected(false);
@@ -154,7 +185,9 @@
 
     self.reloadThreads = function () {
         self.isShowingNewPostForm(false);
-        self.isShowingNewAccountFrom(false);
+        self.isShowingNewAccountForm(false);
+        self.isShowingPasswordResetForm(false);
+        self.isShowingUpdatePasswordForm(false);
         self.isShowingRegistrationSuccess(false);
         if (self.expandedThread()) {
             self.expandedThread().isExpanded(false);
@@ -173,7 +206,9 @@
             self.newMessageTitle("Re: {0}".format(post.title()));
         }
         self.postToReplyTo(post);
-        self.isShowingNewAccountFrom(false);
+        self.isShowingNewAccountForm(false);
+        self.isShowingPasswordResetForm(false);
+        self.isShowingUpdatePasswordForm(false);
         self.isShowingNewPostForm(true);
         self.isShowingRegistrationSuccess(false);
     };
@@ -183,7 +218,9 @@
         self.newMessageText(null);
         self.newMessageTitle(null);
         self.postToReplyTo(null);
-        self.isShowingNewAccountFrom(false);
+        self.isShowingNewAccountForm(false);
+        self.isShowingPasswordResetForm(false);
+        self.isShowingUpdatePasswordForm(false);
         self.isShowingNewPostForm(true);
         self.isShowingRegistrationSuccess(false);
     };
@@ -193,7 +230,7 @@
         self.registerUserError(null);
         self.service().registerAccount(self.username(), self.emailAddress(), self.password(), self.passwordConfirm())
             .done(function () {
-                self.isShowingNewAccountFrom(false);
+                self.isShowingNewAccountForm(false);
                 self.isShowingRegistrationSuccess(true);
             })
             .fail(function (jqXHR) {
@@ -203,6 +240,44 @@
                 self.isCreatingAccount(false);
                 self.password(null);
                 self.passwordConfirm(null);
+            });
+    };
+
+    self.sendResetPasswordEmail = function () {
+        self.isSendingResetPasswordEmail(true);
+        self.isResetPasswordError(false);
+        self.service().requestPasswordReset(self.emailAddress())
+            .done(function (isPasswordResetEmailSent) {
+                if (!isPasswordResetEmailSent) {
+                    self.isResetPasswordError(true);
+                } else {
+                    self.updatePasswordEmailAddress(self.emailAddress());
+                    self.showUpdatePasswordForm();
+                }
+            })
+            .fail(function () {
+                self.isResetPasswordError(true);
+            })
+            .always(function () {
+                self.isSendingResetPasswordEmail(false);
+            });
+    };
+
+    self.resetPassword = function () {
+        self.isResettingPassword(true);
+        self.passwordUpdateError(null);
+        self.service().updatePassword(self.updatePasswordEmailAddress(), self.passwordResetCode(), self.password(), self.passwordConfirm())
+            .done(function () {
+                self.isPasswordUpdateComplete(true);
+                self.updatePasswordEmailAddress(null);
+                self.password(null);
+                self.passwordConfirm(null);
+            })
+            .fail(function (jqXHR) {
+                self.populateErrorMessage(self.passwordUpdateError, jqXHR);
+            })
+            .always(function () {
+                self.isResettingPassword(false);
             });
     };
 

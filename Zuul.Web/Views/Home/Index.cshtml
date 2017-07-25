@@ -82,7 +82,7 @@
         </p>
     </div>
     <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
-        <div data-bind="if: !isShowingNewPostForm() && !isShowingNewAccountFrom()">
+        <div data-bind="if: !isShowingNewPostForm() && !isShowingNewAccountForm()">
             <div data-bind="if: selectedPost">
                 <div data-bind="with: selectedPost" class="post-container">
                     <div class="post-title" data-bind="text: title">
@@ -104,7 +104,7 @@
                     <div class="post-body-notch-bottom"></div>
                 </div>
             </div>
-            <div data-bind="if: !selectedPost() && !isShowingRegistrationSuccess()">
+            <div data-bind="if: !selectedPost() && !isShowingRegistrationSuccess() && !isShowingPasswordResetForm() && !isShowingUpdatePasswordForm() && !isShowingPasswordResetForm()">
                 <div class="post-container">
                     <div class="post-title">
                         Welcome to the new forum
@@ -175,7 +175,7 @@
                 </div>
             </div>
         </div>
-        <div data-bind="if: isShowingNewAccountFrom">
+        <div data-bind="if: isShowingNewAccountForm">
             <div class="post-container">
                 <div class="post-title">
                     Create Account
@@ -211,6 +211,66 @@
                 </div>
             </div>
         </div>
+        <div data-bind="if: isShowingPasswordResetForm">
+            <div class="post-container">
+                <div class="post-title">
+                    Reset Password
+                </div>
+                <div class="post-input-form">
+                    <div>
+                        Enter your email address to reset your password. You will recieve an email containing a code that you will need to complete the process.
+                    </div>
+                    <div class="post-label">
+                        Email
+                    </div>
+                    <input type="text" class="post-input" data-bind="value: emailAddress" />
+                    <div class="register-user-error" data-bind="visible: isResetPasswordError">
+                        <div>The email address was not recognised.</div>
+                    </div>
+                    <div class="create-account-button">
+                        <a href="#" class="link-text" data-bind="visible: !isSendingResetPasswordEmail(), click: sendResetPasswordEmail">Request Password Reset</a>
+                        <span class="no-click-text" data-bind="visible: isSendingResetPasswordEmail">
+                            Requesting Password Reset
+                            <a class="glyphicon glyphicon-refresh spinning"></a>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div data-bind="if: isShowingUpdatePasswordForm">
+            <div class="post-container">
+                <div class="post-title">
+                    Update Password
+                </div>
+                <div class="post-input-form" data-bind="if: !isPasswordUpdateComplete()">
+                    <div class="post-label">
+                        Email Code (this was sent to you)
+                    </div>
+                    <input type="text" class="post-input" data-bind="value: passwordResetCode" />
+                    <div class="post-label">
+                        Password
+                    </div>
+                    <input type="password" class="post-input" data-bind="value: password" />
+                    <div class="post-label">
+                        Confirm Password
+                    </div>
+                    <input type="password" class="post-input" data-bind="value: passwordConfirm" />
+                    <div class="register-user-error" data-bind="visible: passwordUpdateError">
+                        <span data-bind="text: passwordUpdateError"></span>
+                    </div>
+                    <div class="create-account-button">
+                        <a href="#" class="link-text" data-bind="visible: !isResettingPassword(), click: resetPassword">Update Password</a>
+                        <span class="no-click-text" data-bind="visible: isResettingPassword">
+                            Updating Password
+                            <a class="glyphicon glyphicon-refresh spinning"></a>
+                        </span>
+                    </div>
+                </div>
+                <div class="post-input-form" data-bind="if: isPasswordUpdateComplete">
+                    <div>Your password was updated succesfully. You can now post threads and replies. We can't wait.</div>
+                </div>
+            </div>
+        </div>
     </div>
     <div class="col-xs-12 col-sm-6 col-md-8 col-lg-9 forum-right-side">
         <div class="top-toolbar row">
@@ -223,6 +283,9 @@
                 <span class="link-text" data-bind="click: showNewThreadForm">Add Message</span> |
                 <span class="link-text" data-bind="visible: isLoggedIn, click: logout">Logout</span>
                 <span class="link-text" data-bind="visible: !isLoggedIn(), click: showNewAccountForm">Create account</span>
+                <!-- ko if: !isLoggedIn() -->
+                | <span class="link-text" data-bind="click: showPasswordResetForm">Reset Password</span>
+                <!-- /ko -->
                 <input class="search-bar" type="text" placeholder="Don't expect this to work you cunts" />
             </div>
         </div>

@@ -24,5 +24,7 @@ namespace Zuul.Model
         public virtual string PasswordHash { get; set; }
         public virtual Guid Token { get; set; }
         public virtual bool IsActivated { get; set; }
+        public virtual Guid? ResetToken { get; set; }
+        public virtual DateTime? ResetTokenExpiry { get; set; }
     }
 }

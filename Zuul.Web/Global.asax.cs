@@ -10,6 +10,9 @@ namespace Zuul.Web
     {
         protected void Application_Start()
         {
+            #if DEBUG
+            HibernatingRhinos.Profiler.Appender.NHibernate.NHibernateProfiler.Initialize();
+            #endif
             AreaRegistration.RegisterAllAreas();
             GlobalConfiguration.Configure(WebApiConfig.Register);
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
