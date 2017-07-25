@@ -412,6 +412,15 @@ a.link-text:hover {
     overflow: hidden;
 }
 
+.reset-password-link {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.verify-email-password-link {
+    display: block;
+}
+
 .no-wrap {
     white-space: nowrap;
 }

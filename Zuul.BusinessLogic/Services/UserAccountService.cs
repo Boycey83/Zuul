@@ -21,8 +21,14 @@ namespace Zuul.BusinessLogic.Services
 
         public int CreateUser(string userEmail, string username, string password, string passwordConfirm)
         {
-            userEmail = userEmail.Trim();
-            username = username.Trim();
+            if (!string.IsNullOrEmpty(userEmail))
+            {
+                userEmail = userEmail.Trim();
+            }
+            if (!string.IsNullOrEmpty(username))
+            {
+                username = username.Trim();
+            }
             ValidateCreate(userEmail, username, password, passwordConfirm);
             var passwordSalt = _passwordService.GetPasswordSalt();
             var passwordHash = _passwordService.GetPasswordHash(password, passwordSalt);
@@ -31,6 +37,17 @@ namespace Zuul.BusinessLogic.Services
             var userAccountId = _userAccountRepository.CreateUser(userAccount);
             EmailHelper.SendUserRegistrationEmail(userEmail, username, userAccountId, token);
             return userAccountId;
+        }
+
+        public bool VerifyPasswordResetEmail(string emailAddress)
+        {
+            emailAddress = emailAddress.Trim();
+            var userAccount = _userAccountRepository.GetByEmail(emailAddress);
+            if (userAccount == null)
+            {
+                return false;
+            }
+            return true;
         }
 
         public bool RequestPasswordReset(string emailAddress)
@@ -148,7 +165,7 @@ namespace Zuul.BusinessLogic.Services
 
         private void ValidateUserAccountEmail(string userEmail)
         {
-            if (userEmail.Length == 0)
+            if (string.IsNullOrEmpty(userEmail))
             {
                 throw new ValidationException(ExceptionMessages.CreateUserAccountEmptyEmailAddress);
             }
@@ -169,7 +186,7 @@ namespace Zuul.BusinessLogic.Services
 
         private void ValidateUserAccountUsername(string username)
         {
-            if (username.Length == 0)
+            if (string.IsNullOrEmpty(username))
             {
                 throw new ValidationException(ExceptionMessages.CreateUserAccountEmptyUsername);
             }
@@ -206,7 +223,7 @@ namespace Zuul.BusinessLogic.Services
             {
                 throw new ValidationException(ExceptionMessages.UpdatePasswordTokenExpired);
             }
-            if (userAccount.ResetToken.ToString() != authenticationCode.ToLower())
+            if (authenticationCode == null || userAccount.ResetToken.ToString() != authenticationCode.ToLower())
             {
                 throw new ValidationException(ExceptionMessages.UpdatePasswordTokenIncorrect);
             }

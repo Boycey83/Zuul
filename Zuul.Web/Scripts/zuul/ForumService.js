@@ -19,6 +19,15 @@
         });
     };
 
+    self.verifyPasswordResetEmail = function (emailAddress) {
+        return $.ajax({
+            type: "POST",
+            url: zuul.constants.api.verifyPasswordResetEmail,
+            data: ko.toJSON({ EmailAddress: emailAddress }),
+            contentType: 'application/json'
+        });
+    };
+
     self.updatePassword = function (emailAddress, authenticationCode, password, passwordConfirm) {
         return $.ajax({
             type: "POST",

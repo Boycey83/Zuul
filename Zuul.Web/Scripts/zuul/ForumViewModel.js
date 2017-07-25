@@ -153,6 +153,7 @@
     };
 
     self.showPasswordResetForm = function () {
+        self.isPasswordUpdateComplete(false);
         self.username(null);
         self.isShowingNewPostForm(false);
         self.isShowingNewAccountForm(false);
@@ -243,6 +244,27 @@
             });
     };
 
+    self.skipResetPasswordEmail = function () {
+        self.isSendingResetPasswordEmail(true);
+        self.isResetPasswordError(false);
+        self.service().verifyPasswordResetEmail(self.emailAddress())
+            .done(function (isEmailVerified) {
+                if (!isEmailVerified) {
+                    self.isResetPasswordError(true);
+                } else {
+                    self.updatePasswordEmailAddress(self.emailAddress());
+                    self.emailAddress(null);
+                    self.showUpdatePasswordForm();
+                }
+            })
+            .fail(function () {
+                self.isResetPasswordError(true);
+            })
+            .always(function () {
+                self.isSendingResetPasswordEmail(false);
+            });
+    };
+
     self.sendResetPasswordEmail = function () {
         self.isSendingResetPasswordEmail(true);
         self.isResetPasswordError(false);
@@ -252,6 +274,7 @@
                     self.isResetPasswordError(true);
                 } else {
                     self.updatePasswordEmailAddress(self.emailAddress());
+                    self.emailAddress(null);
                     self.showUpdatePasswordForm();
                 }
             })

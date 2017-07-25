@@ -2,6 +2,7 @@
     api: {
         registerAccount: "/api/UserAccount/Register",
         requestPasswordReset: "/api/UserAccount/RequestPasswordReset",
+        verifyPasswordResetEmail: "/api/UserAccount/VerifyPasswordResetEmail",
         updatePassword: "/api/UserAccount/UpdatePassword",
         login: "/api/UserAccount/Login",
         logout: "/api/UserAccount/Logout",

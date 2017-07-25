@@ -35,6 +35,13 @@ namespace Zuul.Web.Api
         }
 
         [HttpPost]
+        [Route("VerifyPasswordResetEmail")]
+        public bool VerifyPasswordResetEmail(RequestPasswordResetDto requestPasswordResetDto)
+        {
+            return _userAccountService.VerifyPasswordResetEmail(requestPasswordResetDto.EmailAddress);
+        }
+
+        [HttpPost]
         [Route("UpdatePassword")]
         public void UpdatePassword (UpdatePasswordDto updatePasswordDto)
         {
