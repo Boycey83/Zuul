@@ -28,7 +28,7 @@ namespace Zuul.Data.Repositories
 
         public IEnumerable<Post> GetTopPostsByThreadId(int threadId)
         {
-            var posts =
+            return
                 _session
                     .CreateCriteria<Post>()
                     .Add(Restrictions.Eq("Thread.Id", threadId))
@@ -39,7 +39,6 @@ namespace Zuul.Data.Repositories
                     .SetMaxResults(1250)
                     .List<Post>()
                     .Where(p => p.Parent == null);
-            return posts;
         }
     }
 }
