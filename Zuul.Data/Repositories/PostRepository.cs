@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Zuul.Model;
 using NHibernate.Transform;
 using NHibernate.Criterion;
+using NHibernate.SqlCommand;
 
 namespace Zuul.Data.Repositories
 {
@@ -33,7 +34,8 @@ namespace Zuul.Data.Repositories
                     .CreateCriteria<Post>()
                     .Add(Restrictions.Eq("Thread.Id", threadId))
                     .AddOrder(Order.Asc("CreatedDateTimeUtc"))
-                    .SetFetchMode("Replies", FetchMode.Join)
+                    .SetFetchMode("Replies", FetchMode.Join).CreateAlias("Replies", "r", JoinType.LeftOuterJoin)
+                    .AddOrder(Order.Asc("r.CreatedDateTimeUtc"))
                     .SetFetchMode("PostedBy", FetchMode.Join)
                     .SetResultTransformer(new DistinctRootEntityResultTransformer())
                     .SetMaxResults(1250)
